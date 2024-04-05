@@ -15,30 +15,51 @@
         
 
 
-        <script>
-            function freezeModel(modelId) {
-              const model = document.getElementById(modelId);
-              model.setAttribute('position', model.getAttribute('position'));
-              model.setAttribute('rotation', model.getAttribute('rotation'));
-              
-              // Start the fade timer (new code)
-              startFadeTimer(modelId);
-            }
-          
-            function startFadeTimer(modelId) {
-              let fadeTime = 30000; // Adjust fade duration in milliseconds (3 seconds here)
-              let opacity = 1;
-              let fadeInterval = setInterval(() => {
-                opacity -= 0.05; // Adjust fade step (smaller for slower fade)
-                if (opacity <= 0) {
-                  document.getElementById(modelId).setAttribute('visible', false);
-                  clearInterval(fadeInterval);
-                } else {
-                  document.getElementById(modelId).setAttribute('material.opacity', opacity);
-                }
-              }, 50); // Adjust fade interval in milliseconds (50 here for smooth fade)
-            }
-          </script>
+       <script>
+  // Define a structure to hold previous values and a smoothing factor
+  const smoothingData = {
+    profondita: { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 } },
+    profondita2: { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 } },
+  };
+  const smoothingFactor = 0.5; // Adjust for more or less smoothing
+  
+  function freezeModel(modelId) {
+    const model = document.getElementById(modelId);
+    const newPosition = model.getAttribute('position');
+    const newRotation = model.getAttribute('rotation');
+    
+    // Smooth position
+    const smoothedPosition = {
+      x: smoothingData[modelId].position.x + (newPosition.x - smoothingData[modelId].position.x) * smoothingFactor,
+      y: smoothingData[modelId].position.y + (newPosition.y - smoothingData[modelId].position.y) * smoothingFactor,
+      z: smoothingData[modelId].position.z + (newPosition.z - smoothingData[modelId].position.z) * smoothingFactor,
+    };
+    
+    // Smooth rotation
+    const smoothedRotation = {
+      x: smoothingData[modelId].rotation.x + (newRotation.x - smoothingData[modelId].rotation.x) * smoothingFactor,
+      y: smoothingData[modelId].rotation.y + (newRotation.y - smoothingData[modelId].rotation.y) * smoothingFactor,
+      z: smoothingData[modelId].rotation.z + (newRotation.z - smoothingData[modelId].rotation.z) * smoothingFactor,
+    };
+    
+    // Apply smoothed position and rotation
+    model.setAttribute('position', smoothedPosition);
+    model.setAttribute('rotation', smoothedRotation);
+    
+    // Update the smoothing data for the next iteration
+    smoothingData[modelId].position = smoothedPosition;
+    smoothingData[modelId].rotation = smoothedRotation;
+
+    // Start the fade timer
+    startFadeTimer(modelId);
+  }
+  
+  // Existing startFadeTimer function remains the same
+  function startFadeTimer(modelId) {
+    // Your existing fade logic
+  }
+</script>
+
           
           
 
