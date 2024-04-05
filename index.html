@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
@@ -39,27 +39,6 @@
               }, 50); // Adjust fade interval in milliseconds (50 here for smooth fade)
             }
           </script>
-		
-		<script> 
-			
-		AFRAME.registerComponent('high-res-camera', {
-    init: function () {
-        navigator.mediaDevices.getUserMedia({ video: { width: 1920, height: 1080 } }) // Example for 1080p
-            .then((stream) => {
-                // Assuming the video source is already in the scene, replace its srcObject with the new stream
-                const video = document.querySelector('video');
-                if (video) {
-                    video.srcObject = stream;
-                }
-            })
-            .catch((err) => {
-                console.error('Failed to set high-resolution camera:', err);
-            });
-    }
-});
-
-		
-		</script>
           
           
 
@@ -86,7 +65,6 @@
 
 
         <a-scene 
-			high-res-camera
             vr-mode-ui="enabled: false;"
             loading-screen="enabled: false;"
             arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
